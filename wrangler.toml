@@ -19,12 +19,12 @@ mode = "smart"
 [[d1_databases]]
 binding = "DATABASE"
 database_name = "teds-accounts-db"
-database_id = "your-d1-database-id-here"
+database_id = "43e32e93-2ddc-477a-9037-3799c4376d66"
 migrations_dir = "drizzle"
 
 [[kv_namespaces]]
 binding = "KV"
-id = "your-kv-namespace-id-here"
+id = "f4168fcc34804e9fbb7ae8309c7d64ce"
 
 [[r2_buckets]]
 binding = "R2_BUCKET"
