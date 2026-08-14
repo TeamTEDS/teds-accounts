@@ -2,9 +2,10 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { betterAuth } from "better-auth";
 import { withCloudflare } from "better-auth-cloudflare";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import { anonymous, openAPI } from "better-auth/plugins";
+import { openAPI } from "better-auth/plugins";
 import type { D1Database } from "@cloudflare/workers-types";
 import { getDb } from "../db";
+import { emailHarmony } from 'better-auth-harmony';
 
 // Define an asynchronous function to build your auth configuration
 async function authBuilder() {
@@ -69,13 +70,14 @@ async function authBuilder() {
             },
             {
                 baseURL: cfCtx.env.BETTER_AUTH_URL,
+                emailAndPassword: { enabled: true },
                 trustedOrigins: (cfCtx.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "").split(",").filter(Boolean),
                 rateLimit: {
                     enabled: true,
                     window: 60,
                     max: 100,
                 },
-                plugins: [openAPI(), anonymous()],
+                plugins: [openAPI(), emailHarmony()],
             }
         ),
     });
@@ -118,7 +120,7 @@ export const auth = betterAuth({
             },
         },
         {
-            plugins: [openAPI(), anonymous()],
+            plugins: [openAPI(), emailHarmony()],
         }
     ),
 

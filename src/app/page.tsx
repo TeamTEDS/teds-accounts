@@ -39,7 +39,7 @@ export default function Home() {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
+        <div className="flex items-center justify-center min-h-screen p-8 font-[family-name:var(--font-inter)]">
             <Card className="w-full max-w-sm">
                 <CardHeader>
                     <CardTitle className="text-2xl">Login</CardTitle>
