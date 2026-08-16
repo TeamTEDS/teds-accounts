@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    /* config options here */
-    typescript: {
-        ignoreBuildErrors: true,
-    },
+  /* config options here */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
@@ -14,5 +14,5 @@ export default nextConfig;
 // workerd/Miniflare instance that causes SQLITE_BUSY crashes.
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 if (process.env.NODE_ENV === "development") {
-    initOpenNextCloudflareForDev();
+  initOpenNextCloudflareForDev();
 }

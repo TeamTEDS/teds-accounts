@@ -79,35 +79,35 @@ import { getDb } from "../db";
 
 // Define an asynchronous function to build your auth configuration
 async function authBuilder() {
-    const dbInstance = await getDb();
-    const cfCtx = getCloudflareContext();
-    return betterAuth({
-        ...withCloudflare(
-            {
-                autoDetectIpAddress: true,
-                geolocationTracking: true,
-                cf: cfCtx.cf,
-                d1: {
-                    db: dbInstance,
-                    options: {
-                        usePlural: true,
-                        debugLogs: true,
-                    },
-                },
-                kv: cfCtx.env.KV,
-            },
-            {
-                baseURL: cfCtx.env.BETTER_AUTH_URL,
-                trustedOrigins: (cfCtx.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "").split(",").filter(Boolean),
-                rateLimit: {
-                    enabled: true,
-                    window: 60, // Minimum KV TTL is 60s
-                    max: 100, // reqs/window
-                },
-                plugins: [openAPI(), anonymous()],
-            }
-        ),
-    });
+  const dbInstance = await getDb();
+  const cfCtx = getCloudflareContext();
+  return betterAuth({
+    ...withCloudflare(
+      {
+        autoDetectIpAddress: true,
+        geolocationTracking: true,
+        cf: cfCtx.cf,
+        d1: {
+          db: dbInstance,
+          options: {
+            usePlural: true,
+            debugLogs: true,
+          },
+        },
+        kv: cfCtx.env.KV,
+      },
+      {
+        baseURL: cfCtx.env.BETTER_AUTH_URL,
+        trustedOrigins: (cfCtx.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "").split(",").filter(Boolean),
+        rateLimit: {
+          enabled: true,
+          window: 60, // Minimum KV TTL is 60s
+          max: 100, // reqs/window
+        },
+        plugins: [openAPI(), anonymous()],
+      }
+    ),
+  });
 }
 
 // Singleton pattern to ensure a single auth instance
@@ -115,10 +115,10 @@ let authInstance: Awaited<ReturnType<typeof authBuilder>> | null = null;
 
 // Asynchronously initializes and retrieves the shared auth instance
 export async function initAuth() {
-    if (!authInstance) {
-        authInstance = await authBuilder();
-    }
-    return authInstance;
+  if (!authInstance) {
+    authInstance = await authBuilder();
+  }
+  return authInstance;
 }
 ```
 
@@ -139,30 +139,30 @@ For the Better Auth CLI to generate schemas, a separate static configuration is 
 // It's necessary because the main `authBuilder` performs async operations like `getDb()`
 // which use `getCloudflareContext` (not available in CLI context).
 export const auth = betterAuth({
-    ...withCloudflare(
-        {
-            autoDetectIpAddress: true,
-            geolocationTracking: true,
-            cf: {},
-            r2: {
-                bucket: {} as any, // Mock bucket for schema generation
-                additionalFields: {
-                    category: { type: "string", required: false },
-                    isPublic: { type: "boolean", required: false },
-                    description: { type: "string", required: false },
-                },
-            },
+  ...withCloudflare(
+    {
+      autoDetectIpAddress: true,
+      geolocationTracking: true,
+      cf: {},
+      r2: {
+        bucket: {} as any, // Mock bucket for schema generation
+        additionalFields: {
+          category: { type: "string", required: false },
+          isPublic: { type: "boolean", required: false },
+          description: { type: "string", required: false },
         },
-        {
-            plugins: [openAPI(), anonymous()],
-        }
-    ),
+      },
+    },
+    {
+      plugins: [openAPI(), anonymous()],
+    }
+  ),
 
-    database: drizzleAdapter(process.env.DATABASE as any, {
-        provider: "sqlite",
-        usePlural: true,
-        debugLogs: true,
-    }),
+  database: drizzleAdapter(process.env.DATABASE as any, {
+    provider: "sqlite",
+    usePlural: true,
+    debugLogs: true,
+  }),
 });
 ```
 

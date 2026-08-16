@@ -17,42 +17,32 @@ import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import Link from "next/link";
 
-const formSchema = z
-  .object({
-    name: z.string().min(1, { message: "Name is required" }),
-    email: z.email({ message: "Invalid email address" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" })
-      .max(128, { message: "Password must be at most 128 characters" }),
-    confirmPassword: z.string(),
-  })
-  .refine(data => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+const formSchema = z.object({
+  email: z.email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .max(128, { message: "Password must be at most 128 characters" }),
+});
 
-export function SignupForm() {
+export function LoginForm() {
   const form = useForm({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
     validators: {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
       try {
-        const response = await authClient.signUp.email({
-          name: value.name,
+        const response = await authClient.signIn.email({
           email: value.email,
           password: value.password,
         });
-        console.log("Signup successful:", response);
+        console.log("Login successful:", response);
       } catch (error) {
-        console.error("Signup failed:", error);
+        console.error("Login failed:", error);
       }
     },
   });
@@ -62,45 +52,23 @@ export function SignupForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>Enter your details below to create an account</CardDescription>
+        <CardTitle>Login</CardTitle>
+        <CardDescription>Enter your details below to login to your account</CardDescription>
         <CardAction>
           <Button asChild variant="link" className="w-full">
-            <Link href="/login">Login</Link>
+            <Link href="/signup">Sign Up</Link>
           </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
         <form
-          id="signup-form"
+          id="login-form"
           onSubmit={e => {
             e.preventDefault();
             form.handleSubmit(e);
           }}
         >
           <FieldGroup>
-            <form.Field
-              name="name"
-              children={field => {
-                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={e => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="John Doe"
-                      required
-                    />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                  </Field>
-                );
-              }}
-            />
             <form.Field
               name="email"
               children={field => {
@@ -131,32 +99,9 @@ export function SignupForm() {
                   <Field data-invalid={isInvalid}>
                     <div className="flex items-center">
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                      <div className="text-xs text-muted-foreground ml-auto">Minimum 8 characters</div>
-                    </div>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={e => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder=""
-                      required
-                    />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                  </Field>
-                );
-              }}
-            />
-            <form.Field
-              name="confirmPassword"
-              children={field => {
-                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <div className="flex items-center">
-                      <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
-                      <div className="text-xs text-muted-foreground ml-auto">Must match password</div>
+                      <Link href="/forgot-password" className="text-xs text-muted-foreground ml-auto hover:underline">
+                        Forgot Password?
+                      </Link>
                     </div>
                     <Input
                       id={field.name}
@@ -177,11 +122,11 @@ export function SignupForm() {
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full" form="signup-form">
-          Sign Up
+        <Button type="submit" className="w-full" form="login-form">
+          Login
         </Button>
         <Button variant="outline" className="w-full">
-          Sign Up with Google
+          Login with Google
         </Button>
       </CardFooter>
     </Card>

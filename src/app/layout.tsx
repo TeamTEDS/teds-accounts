@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
-
 const inter = Inter({
-    variable: "--font-inter",
-    subsets: ["latin"],
+  variable: "--font-inter",
+  subsets: ["latin"],
 });
 
 // const geistMono = Geist_Mono({
@@ -15,27 +14,25 @@ const inter = Inter({
 // });
 
 export const metadata: Metadata = {
-    title: "better-auth-cloudflare",
-    description: "Example app using our plugin",
+  title: "better-auth-cloudflare",
+  description: "Example app using our plugin",
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en" suppressHydrationWarning>
-            <body className={`${inter.variable} antialiased`}>
-                <ThemeProvider  
-                    attribute="class"
-                    defaultTheme="dark"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    {children}
-                </ThemeProvider>
-            </body>
-        </html>
-    );
+  return (
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body className={`${inter.className} antialiased`}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </>
+  );
 }

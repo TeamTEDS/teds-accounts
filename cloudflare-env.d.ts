@@ -2,9 +2,9 @@
 // by running `wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts`
 
 declare global {
-    namespace NodeJS {
-        interface ProcessEnv extends CloudflareEnv {}
-    }
+  namespace NodeJS {
+    interface ProcessEnv extends CloudflareEnv {}
+  }
 }
 
 export {};
