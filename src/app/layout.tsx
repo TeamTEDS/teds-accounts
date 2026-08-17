@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip"
 import "./globals.css";
+import { Tooltip } from "radix-ui";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +31,9 @@ export default function RootLayout({
         <head />
         <body className={`${inter.className} antialiased`}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            {children}
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
           </ThemeProvider>
         </body>
       </html>
