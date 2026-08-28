@@ -5,6 +5,16 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+        port: "",
+        pathname: "/a/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
