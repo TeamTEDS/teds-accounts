@@ -6,6 +6,7 @@ import { openAPI } from "better-auth/plugins";
 import type { D1Database } from "@cloudflare/workers-types";
 import { getDb } from "../db";
 import { emailHarmony } from "better-auth-harmony";
+import { nextCookies } from "better-auth/next-js";
 
 // Define an asynchronous function to build your auth configuration
 async function authBuilder() {
@@ -75,13 +76,19 @@ async function authBuilder() {
           minPasswordLength: 8,
           maxPasswordLength: 128,
         },
+        socialProviders: {
+          google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+          }
+        },
         trustedOrigins: (cfCtx.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "").split(",").filter(Boolean),
         rateLimit: {
           enabled: true,
           window: 60,
           max: 100,
         },
-        plugins: [openAPI(), emailHarmony()],
+        plugins: [openAPI(), emailHarmony(), nextCookies()],
       }
     ),
   });
@@ -125,7 +132,18 @@ export const auth = betterAuth({
     },
     {
       plugins: [openAPI(), emailHarmony()],
-    }
+      socialProviders: {
+          google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+          }
+        },
+      account: {
+        accountLinking: {
+            allowDifferentEmails: true
+        }
+      },
+    },
   ),
 
   // Used by the Better Auth CLI for schema generation.

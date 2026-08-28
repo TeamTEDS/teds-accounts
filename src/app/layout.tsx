@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip"
 import "./globals.css";
 import { Tooltip } from "radix-ui";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,7 +33,8 @@ export default function RootLayout({
         <body className={`${inter.className} antialiased`}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
             <TooltipProvider>
-              {children}
+              <main>{children}</main>
+              <Toaster richColors position="top-right" />
             </TooltipProvider>
           </ThemeProvider>
         </body>

@@ -12,6 +12,7 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import authClient from "@/auth/authClient";
+import { toast } from "sonner"
 import { useState } from "react"; // or standard react
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
@@ -44,16 +45,22 @@ export function SignupForm() {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        const response = await authClient.signUp.email({
-          name: value.name,
-          email: value.email,
-          password: value.password,
-        });
-        console.log("Signup successful:", response);
-      } catch (error) {
-        console.error("Signup failed:", error);
-      }
+      await authClient.signUp.email({
+        name: value.name,
+        email: value.email,
+        password: value.password,
+      }, {
+        onSuccess: (context) => {
+          console.log("Signup successful:", context);
+          toast.success("Signup successful!");
+        },
+        onError: (context) => {
+          console.error("Signup failed:", context.error);
+          toast.error(`Signup failed`, {
+            description: `${context.error.message}`,
+          });
+        }
+      });
     },
   });
 
@@ -141,6 +148,7 @@ export function SignupForm() {
                       onChange={e => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder=""
+                      type="password"
                       required
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -166,6 +174,7 @@ export function SignupForm() {
                       onChange={e => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder=""
+                      type="password"
                       required
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors} />}

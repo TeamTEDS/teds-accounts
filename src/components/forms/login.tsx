@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,11 +13,16 @@ import {
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner"
 import authClient from "@/auth/authClient";
-import { useState } from "react"; // or standard react
+import { toast } from "sonner"
+import { useEffect, useState, useTransition } from "react"; // or standard react
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
+import * as React from "react"
+import { ConsoleLogWriter } from "drizzle-orm";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -23,6 +30,7 @@ const formSchema = z.object({
     .string()
     .min(8, { message: "Password must be at least 8 characters" })
     .max(128, { message: "Password must be at most 128 characters" }),
+  rememberMe: z.boolean().default(true),
 });
 
 export function LoginForm() {
@@ -30,25 +38,45 @@ export function LoginForm() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
     validators: {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        const response = await authClient.signIn.email({
+
+      await authClient.signIn.email(
+        {
           email: value.email,
           password: value.password,
           callbackURL: "/dashboard", 
-        });
-        console.log("Login successful:", response);
-      } catch (error) {
-        console.error("Login failed:", error);
-      }
+          rememberMe: value.rememberMe || false,
+        },
+        {
+          onSuccess: (context) => {
+            // console.log("Login successful:", context);
+            toast.success("Login successful!");
+          },
+          onError: (context) => {
+            // console.error("Login failed:", context.error);
+            toast.error(`Login failed`, {
+              description: `${context.error.message}`,
+            });
+          }
+        }
+      );
     },
   });
 
+  async function signInWithGoogle() {
+    const data = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    })
+  }
+
   const [email, setEmail] = useState("");
+  const [checked, setChecked] = React.useState(false)
 
   return (
     <Card>
@@ -112,8 +140,45 @@ export function LoginForm() {
                       onChange={e => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder=""
+                      type="password"
                       required
                     />
+                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                  </Field>
+                );
+              }}
+            />
+            <form.Field
+              name="rememberMe"
+              children={field => {
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                
+                return (
+                  <Field data-invalid={isInvalid} >
+                    <div className="flex items-center gap-1">
+                      <Checkbox 
+                        id={field.name}
+                        name={field.name}
+                        checked={field.state.value}
+                        onBlur={field.handleBlur}
+                        onCheckedChange={(checked) => field.handleChange(Boolean(checked))}
+                        aria-invalid={isInvalid}
+                      />
+                      <FieldLabel htmlFor={field.name}>
+                        Remember me
+                      </FieldLabel>
+                    </div>
+                    {/* <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={e => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder=""
+                      type="password"
+                      required
+                    /> */}
                     {isInvalid && <FieldError errors={field.state.meta.errors} />}
                   </Field>
                 );
@@ -123,10 +188,10 @@ export function LoginForm() {
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full" form="login-form">
-          Login
+        <Button type="submit" className="w-full" form="login-form" disabled={form.state.isSubmitting}>
+          {form.state.isSubmitting ? <Spinner className="h-4 w-4"/> : <span>Login</span>}
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
           Login with Google
         </Button>
       </CardFooter>
