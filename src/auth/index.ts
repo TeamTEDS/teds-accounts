@@ -2,7 +2,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { betterAuth } from "better-auth";
 import { withCloudflare } from "better-auth-cloudflare";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import { openAPI } from "better-auth/plugins";
+import { openAPI, admin } from "better-auth/plugins";
 import type { D1Database } from "@cloudflare/workers-types";
 import { getDb } from "../db";
 import { emailHarmony } from "better-auth-harmony";
@@ -88,7 +88,7 @@ async function authBuilder() {
           window: 60,
           max: 100,
         },
-        plugins: [openAPI(), emailHarmony(), nextCookies()],
+        plugins: [openAPI(), emailHarmony(), nextCookies(), admin()],
       }
     ),
   });
@@ -131,7 +131,7 @@ export const auth = betterAuth({
       },
     },
     {
-      plugins: [openAPI(), emailHarmony()],
+      plugins: [openAPI(), emailHarmony(), admin()],
       socialProviders: {
           google: {
             clientId: process.env.GOOGLE_CLIENT_ID as string,
