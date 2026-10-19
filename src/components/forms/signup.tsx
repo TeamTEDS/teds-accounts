@@ -64,6 +64,13 @@ export function SignupForm() {
     },
   });
 
+  async function signInWithGoogle() {
+      const data = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      })
+    }
+
   const [email, setEmail] = useState("");
 
   return (
@@ -189,7 +196,7 @@ export function SignupForm() {
         <Button type="submit" className="w-full" form="signup-form">
           Sign Up
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
           Sign Up with Google
         </Button>
       </CardFooter>
