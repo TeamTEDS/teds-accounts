@@ -17,12 +17,14 @@ import {
   SearchIcon,
   SettingsIcon,
   UsersIcon,
+  MailIcon,
+  MailQuestionIcon,
 } from "lucide-react";
 
 import Image from "next/image";
 import authClient from "@/auth/authClient";
 import { betterAuth } from "@/auth/better-auth";
-
+import { NavEmailSettings } from "@/components/nav-email-settings";
 import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -153,6 +155,18 @@ const data = {
       icon: FileIcon,
     },
   ],
+  navEmailSettings: [
+    {
+      name: "Emails",
+      url: "#",
+      icon: MailIcon,
+    },
+    {
+      name: "Email Requests",
+      url: "#",
+      icon: MailQuestionIcon,
+    },
+  ]
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -191,6 +205,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavEmailSettings items={data.navEmailSettings} />
+        <NavDocuments items={data.documents} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

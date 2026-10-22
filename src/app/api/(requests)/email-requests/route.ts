@@ -1,6 +1,39 @@
 import { initAuth } from "@/auth"
 import { getDb, emailRequests } from "@/db"
 import { emailRequestSchema } from "@/lib/validation/email-request"
+import { desc, eq } from "drizzle-orm"
+
+export async function GET(request: Request) {
+  const auth = await initAuth()
+
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  })
+
+  if (!session) {
+    return Response.json(
+      { error: "Authentication required" },
+      { status: 401 },
+    )
+  }
+
+  const db = await getDb()
+  const requests = await db
+    .select({
+      id: emailRequests.id,
+      email: emailRequests.email,
+      usage: emailRequests.usage,
+      primaryEmail: emailRequests.primaryEmail,
+      reason: emailRequests.reason,
+      status: emailRequests.status,
+      createdAt: emailRequests.createdAt,
+    })
+    .from(emailRequests)
+    .where(eq(emailRequests.userId, session.user.id))
+    .orderBy(desc(emailRequests.createdAt))
+
+  return Response.json({ requests })
+}
 
 export async function POST(request: Request) {
   const auth = await initAuth()
