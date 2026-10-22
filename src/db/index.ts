@@ -21,3 +21,4 @@ export * from "drizzle-orm";
 export * from "@/db/auth.schema";
 export * from "./schema";
 export * from "@/db/email-requests.schema"
+export * from "@/db/teds-emails.schema"
