@@ -1,6 +1,6 @@
 # TEDS Accounts
 
-Live Site: [accounts.teds.one](https://accounts.teds.one)
+Live Site: [accounts.teds.one](https://accounts.teds.one) (WIP)
 
 TEDS Accounts is a NextJS app that uses Better Auth for authentication.
 It aims to simplify management of user emails, which in my use-case, is for teds.one emails and accounts, as well as allow self-service. I also plan to use it as a SAML / SSO IDP for other apps.
@@ -89,4 +89,11 @@ For production deployment, set the following via `wrangler.toml` `[vars]` or Clo
 - `BETTER_AUTH_URL` — The worker's primary base URL (e.g., `https://accounts.teds.one`). Set as a `[vars]` entry.
 - `BETTER_AUTH_TRUSTED_ORIGINS` — Comma-separated list of additional trusted origins (e.g., `https://test.workers.dev`). Set as a `[vars]` entry.
 - `BETTER_AUTH_SECRET` — A random 32+ character secret. Set via `wrangler secret put BETTER_AUTH_SECRET`.
+  
+
+## Credits / Disclosure
+
+The getting started / dev part of the README was taken from [`better-auth-cloudflare`](https://github.com/zpg6/better-auth-cloudflare). 
+
+Some AI has been used, such as code completion, help with debugging as well as guidence and some aid with parts of the UI. The main / essential parts written without AI. All AI generated code has been read through, edited and possibly rewritten. Also, I like the look of (shadcn/ui)[https://ui.shadcn.com/] - it's not just something AI decided to use.
   
