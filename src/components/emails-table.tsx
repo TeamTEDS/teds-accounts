@@ -6,52 +6,47 @@ import { useEffect, useState } from "react"
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 
-type EmailRequestStatus = "pending" | "accepted" | "denied"
-
-export type EmailRequestRow = {
+export type EmailRow = {
   id: string
   email: string
-  usage: string
-  primaryEmail: string | null
-  reason: string | null
-  status: EmailRequestStatus
+  type: string
+  enabled: number
   createdAt: string
 }
 
-const columns: ColumnDef<EmailRequestRow, unknown>[] = [
+const columns: ColumnDef<EmailRow, unknown>[] = [
   {
     accessorKey: "email",
     header: "Email",
   },
   {
-    accessorKey: "usage",
-    header: "Usage",
+    accessorKey: "type",
+    header: "Type",
   },
   {
-    accessorKey: "primaryEmail",
-    header: "Primary email",
-    cell: ({ row }) => row.original.primaryEmail ?? "—",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "enabled",
+    header: "Enabled",
     cell: ({ row }) => (
       <Badge
         variant={
-          row.original.status === "accepted"
+          row.original.enabled === 1
             ? "default"
-            : row.original.status === "denied"
+            : row.original.enabled === 0
               ? "destructive"
               : "secondary"
         }
       >
-        {row.original.status}
+        { row.original.enabled === 1
+            ? "True"
+            : row.original.enabled === 0
+              ? "False"
+              : "?"}
       </Badge>
     ),
   },
   {
     accessorKey: "createdAt",
-    header: "Requested",
+    header: "Created",
     cell: ({ row }) =>
       new Date(row.original.createdAt).toLocaleDateString(undefined, {
         year: "numeric",
@@ -61,8 +56,8 @@ const columns: ColumnDef<EmailRequestRow, unknown>[] = [
   },
 ]
 
-export function EmailRequestsTable() {
-  const [requests, setRequests] = useState<EmailRequestRow[]>([])
+export function EmailsTable() {
+  const [requests, setRequests] = useState<EmailRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -71,12 +66,12 @@ export function EmailRequestsTable() {
 
     async function loadRequests() {
       try {
-        const response = await fetch("/api/email-requests")
+        const response = await fetch("/api/teds-emails")
         if (!response.ok) {
-          throw new Error("Unable to load email requests.")
+          throw new Error("Unable to load emails.")
         }
 
-        const body: { requests?: EmailRequestRow[] } = await response.json()
+        const body: { requests?: EmailRow[] } = await response.json()
         if (isCurrent) {
           setRequests(body.requests ?? [])
         }
@@ -85,7 +80,7 @@ export function EmailRequestsTable() {
           setError(
             requestError instanceof Error
               ? requestError.message
-              : "Unable to load email requests.",
+              : "Unable to load emails.",
           )
         }
       } finally {
