@@ -93,7 +93,9 @@ For production deployment, set the following via `wrangler.toml` `[vars]` or Clo
 
 ## Credits / Disclosure
 
-The getting started / dev part of the README was taken from [`better-auth-cloudflare`](https://github.com/zpg6/better-auth-cloudflare). 
+The getting started / dev part of the README was taken from [`better-auth-cloudflare`](https://github.com/zpg6/better-auth-cloudflare).
+
+[Purelymail](https://purelymail.com/) - The email hosting I use and will use the API to manage accounts. Had to place this here because the email service is great, especially for the price.
 
 Some AI has been used, such as code completion, help with debugging as well as guidence and some aid with parts of the UI. The main / essential parts written without AI. All AI generated code has been read through, edited and possibly rewritten. Also, I like the look of (shadcn/ui)[https://ui.shadcn.com/] - it's not just something AI decided to use.
   
