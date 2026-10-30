@@ -52,26 +52,26 @@ const data = {
       url: "/dashboard",
       icon: LayoutDashboardIcon,
     },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: ListIcon,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: BarChartIcon,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: FolderIcon,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: UsersIcon,
-    },
+    // {
+    //   title: "Lifecycle",
+    //   url: "#",
+    //   icon: ListIcon,
+    // },
+    // {
+    //   title: "Analytics",
+    //   url: "#",
+    //   icon: BarChartIcon,
+    // },
+    // {
+    //   title: "Projects",
+    //   url: "#",
+    //   icon: FolderIcon,
+    // },
+    // {
+    //   title: "Team",
+    //   url: "#",
+    //   icon: UsersIcon,
+    // },
   ],
   navClouds: [
     {
@@ -206,9 +206,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavEmailSettings items={data.navEmailSettings} />
+        {/* <NavDocuments items={data.documents} />
         <NavDocuments items={data.documents} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         {isPending ? (

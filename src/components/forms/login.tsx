@@ -128,9 +128,9 @@ export function LoginForm() {
                   <Field data-invalid={isInvalid}>
                     <div className="flex items-center">
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                      <Link href="/forgot-password" className="text-xs text-muted-foreground ml-auto hover:underline">
+                      {/* <Link href="/forgot-password" className="text-xs text-muted-foreground ml-auto hover:underline">
                         Forgot Password?
-                      </Link>
+                      </Link> */}
                     </div>
                     <Input
                       id={field.name}
