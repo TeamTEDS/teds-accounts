@@ -1,5 +1,7 @@
 # TEDS Accounts
 
+Live Site: [accounts.teds.one](https://accounts.teds.one)
+
 TEDS Accounts is a NextJS app that uses Better Auth for authentication.
 It aims to simplify management of user emails, which in my use-case, is for teds.one emails and accounts, as well as allow self-service. I also plan to use it as a SAML / SSO IDP for other apps.
 
