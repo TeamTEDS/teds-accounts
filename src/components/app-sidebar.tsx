@@ -49,7 +49,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: LayoutDashboardIcon,
     },
     {
@@ -158,12 +158,12 @@ const data = {
   navEmailSettings: [
     {
       name: "Emails",
-      url: "#",
+      url: "/dashboard/email#emails",
       icon: MailIcon,
     },
     {
       name: "Email Requests",
-      url: "#",
+      url: "/dashboard/email#email-requests",
       icon: MailQuestionIcon,
     },
   ]
@@ -179,7 +179,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: session?.user?.image
   };
 
-  console.log("AppSidebar user:", user);
+  // console.log("AppSidebar user:", user);
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
